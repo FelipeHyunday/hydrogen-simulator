@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrogen Consumption Simulator</title>
+</head>
+<body>
+    <h1>Hydrogen Consumption Simulator</h1>
+    <form id="simulatorForm">
+        <label>Energy consumption per km (kWh/km):</label>
+        <input type="number" id="energyPerKm" step="0.01" required>
+        <br>
+        <label>Desired range (km):</label>
+        <input type="number" id="range" required>
+        <br>
+        <label>Cooling power requirement (kW):</label>
+        <input type="number" id="coolingPower" required>
+        <br>
+        <label>Hours of cooling operation per day:</label>
+        <input type="number" id="coolingHours" required>
+        <br>
+        <label>Fuel cell efficiency (%):</label>
+        <input type="number" id="efficiency" step="0.01" required>
+        <br><br>
+        <button type="button" onclick="calculateHydrogen()">Calculate</button>
+    </form>
+
+    <h2>Result:</h2>
+    <p id="result"></p>
+
+    <script>
+        function calculateHydrogen() {
+            const energyPerKm = parseFloat(document.getElementById('energyPerKm').value);
+            const range = parseFloat(document.getElementById('range').value);
+            const coolingPower = parseFloat(document.getElementById('coolingPower').value);
+            const coolingHours = parseFloat(document.getElementById('coolingHours').value);
+            const efficiency = parseFloat(document.getElementById('efficiency').value) / 100;
+
+            // Calculate energy demand for driving and cooling
+            const drivingEnergy = energyPerKm * range;
+            const coolingEnergy = coolingPower * coolingHours;
+            const totalEnergy = drivingEnergy + coolingEnergy;
+
+            // Useful energy per kg of H2 based on efficiency
+            const energyPerKgH2 = 33.33 * efficiency;
+
+            // Calculate required hydrogen
+            const hydrogenNeeded = totalEnergy / energyPerKgH2;
+
+            // Display the result
+            document.getElementById('result').innerText = `To achieve the desired range and maintain cooling, approximately ${hydrogenNeeded.toFixed(2)} kg of hydrogen is needed.`;
+        }
+    </script>
+</body>
+</html>
